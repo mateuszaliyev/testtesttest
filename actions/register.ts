@@ -2,13 +2,36 @@
 
 import * as z from "zod";
 import { RegisterSchema } from "@/schemas"
+import bcrypt from "bcrypt";
+import { db } from "@/lib/db";
+import { users } from "@/drizzle";
 
 export const register = async (values: z.infer<typeof RegisterSchema>) => {
-    const valitedFields = RegisterSchema.safeParse(values);
+    const validatedFields = RegisterSchema.safeParse(values);
 
-    if(!valitedFields.success) {
+    if(!validatedFields.success) {
         return { error: "Invalid fields!" } ;
     }
 
-    return { success: "Email sent!" };
+    const { email, password, first_name, last_name, phone} = validatedFields.data;
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const existingUser = await db.query.users.findFirst({
+        where: (users, { eq }) => eq(users.email, email),
+      });
+      
+    if(existingUser) {
+        return { error: "Email already in use!" };
+    }
+
+    await db.insert(users).values({
+        email,
+        password: hashedPassword,
+        first_name,
+        last_name,
+        phone,
+        image: 'default-image-url',  
+    });
+
+    return { success: "User created successfully!" };
 }
