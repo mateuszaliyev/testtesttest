@@ -23,6 +23,7 @@ import { auth } from "@/auth";
 import { getSession, useSession } from "next-auth/react";
 import currentUser from "@/lib/auth";
 import { useCurrentUser } from "@/hooks/use-current-user";
+import GoogleMap from "../content/google-map";
 
 config({ path: ".env" });
 
@@ -52,15 +53,35 @@ const OrganizationDetails = ({ submit, onSuccess }: OrganizationDetailsProps) =>
     },
   });
 
+
+  const { watch, handleSubmit, control } = form;
+  const [shouldFetch, setShouldFetch] = useState(false);
+
+  const street = watch("hotel_street");
+  const houseNumber = watch("hotel_house_number");
+  const city = watch("hotel_city");
+  const country = watch("hotel_country");
+  const postalCode = watch("hotel_postal_code");
+
+  useEffect(() => {
+      if (street && houseNumber && city && country && postalCode) {
+        setShouldFetch(true);
+      } else {
+        setShouldFetch(false);
+      }
+  }, [street, houseNumber, city, country, postalCode]);
+
   useEffect(() => {
     if (submit) {
       const formElement = document.getElementById("test");
       if (formElement) {
         (formElement as HTMLFormElement).requestSubmit();
-        setSubmit(false);  // Reset the state after submitting the form
+        setSubmit(false);
       }
     }
   }, [submit]);
+
+
   const onSubmit = (values: z.infer<typeof OrganizationDetailsSchema>) => {
     setError("");
     setSuccess("");
@@ -202,6 +223,14 @@ const OrganizationDetails = ({ submit, onSuccess }: OrganizationDetailsProps) =>
               </div>
             </div>
           </div>
+          <GoogleMap
+            street={street}
+            city={city}
+            country={country}
+            houseNumber={houseNumber}
+            postalCode={postalCode}
+            shouldFetch={shouldFetch}
+          />
         </div>
       </form>
     </Form>

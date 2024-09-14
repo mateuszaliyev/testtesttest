@@ -68,17 +68,15 @@ const MultistepForm = () => {
 
   return (
     <Card className="rounded-2xl">
-      <MultistepHeader steps={headerStepArray} />
-
-      <MultistepFormContent>{testForms[currentIndex]}</MultistepFormContent>
-
-      <MultistepNavigation
-        currentStepIndex={currentIndex}
-        goToNextStep={() => setSubmit(true)}
-        goToPreviousStep={goToPreviousStep}
-        totalSteps={totalSteps}
-        isDisabled={isDisabled}
-      />
+        <MultistepHeader steps={headerStepArray} />
+        <MultistepFormContent>{testForms[currentIndex]}</MultistepFormContent>
+        <MultistepNavigation
+            currentStepIndex={currentIndex}
+            goToNextStep={() => setSubmit(true)}
+            goToPreviousStep={goToPreviousStep}
+            totalSteps={totalSteps}
+            isDisabled={isDisabled}
+        />
     </Card>
   );
 };
