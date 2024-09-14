@@ -13,7 +13,7 @@ import { users } from './users';
   
 export const employments = pgTable('employments', {
     id: serial('id').primaryKey().unique().notNull(),
-    hotel_id: integer('hotel_id').notNull().references(()=>hotels.id),
+    hotel_id: integer('hotel_id').references(()=>hotels.id),
     role_id: integer('role_id').notNull().references(()=>roles.id),
     user_id: integer('user_id').notNull().references(()=>users.id),
     created_at: timestamp("created_at", { mode: "string" }).notNull().defaultNow(),

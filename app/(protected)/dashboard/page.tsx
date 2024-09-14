@@ -1,24 +1,16 @@
+import { logout } from "@/actions/logout"
 import { auth, signOut } from "@/auth"
+import { useCurrentUser } from "@/hooks/use-current-user"
  
 export default async function Page() {
-  const session = await auth()
- 
-  if (!session) {
-    return <div>Not authenticated</div>
-  }
- 
+  
+
   return (
     <div className="container">
-      {JSON.stringify(session)}
-      <form action={async () => {
-        "use server"
-
-        await signOut();
-      }}>
-        <button type="submit">
-      Sign out
+      
+      <button type="submit">
+        Sign out
       </button>
-      </form>
       
     </div>
   )

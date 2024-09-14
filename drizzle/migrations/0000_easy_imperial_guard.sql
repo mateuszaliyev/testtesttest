@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS "addresses" (
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "employments" (
 	"id" serial PRIMARY KEY NOT NULL,
-	"hotel_id" integer NOT NULL,
+	"hotel_id" integer,
 	"role_id" integer NOT NULL,
 	"user_id" integer NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
@@ -95,11 +95,11 @@ CREATE TABLE IF NOT EXISTS "tasks" (
 CREATE TABLE IF NOT EXISTS "users" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"email" varchar(256) NOT NULL,
-	"image" varchar(256) NOT NULL,
+	"image" varchar(256),
 	"first_name" varchar(256) NOT NULL,
 	"last_name" varchar(256) NOT NULL,
 	"password" varchar(256) NOT NULL,
-	"phone" varchar(256) NOT NULL,
+	"is_new" boolean DEFAULT true NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"deleted_at" timestamp,
