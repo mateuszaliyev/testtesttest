@@ -50,7 +50,7 @@ const GoogleMap = ({
 
     return (
         <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}>
-            <div className='ml-16 w-full rounded-full'>
+            <div className='ml-16 w-full shadow-lg rounded-3xl overflow-hidden'>
                 <Map
                     defaultZoom={12}
                     center={location ? { lat: location.lat, lng: location.lon } : { lat: 52.241297079639075, lng: 21.008538680558885 }}
