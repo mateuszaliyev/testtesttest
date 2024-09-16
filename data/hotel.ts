@@ -1,6 +1,8 @@
-import { addresses, employments, hotels } from "@/drizzle";
+import { FeaturesProps } from "@/actions/setup-hotel";
+import { addresses, employments, hotels, users } from "@/drizzle";
 import { db } from "@/lib/db";
 import { and, eq } from "drizzle-orm";
+import { getUserById } from "./user";
 
 interface HotelProps {
     name: string;
@@ -83,5 +85,47 @@ export const createHotel = async ({
         }
     } catch(error) {
         console.error("Error during insertion -createHotel-", error);
+    }
+}
+
+// TODO CHANGE SCHEMA FOR HOTEL OWNER
+export const getHotelByOwnerId = async (ownerId: string | undefined) => {
+    if (ownerId) {
+    const query = db.select({
+        id: users.id,
+        first_name: users.first_name,
+        last_name: users.last_name,
+        email: users.email,
+        role_id: employments.role_id,
+        hotel_id: employments.hotel_id
+      })
+      .from(users)
+      .leftJoin(employments, eq(employments.user_id, users.id))
+      .where(and(eq(employments.role_id, 1), eq(users.id, Number(ownerId))))
+
+    
+      return query;
+      }
+      return null;
+}
+
+export const getHotelById = async (hotelId: string | undefined) => {
+    const query = await db.select().from(hotels).where(eq(hotels.id, Number(hotelId))).limit(1);
+    return query;
+}
+
+export const setupFeatures = async (ownerId: string | undefined, features: FeaturesProps) => {
+    try {
+        console.log("trying");
+        if(ownerId) {
+            const hotelOwner = await getHotelByOwnerId(ownerId);
+            const hotel = await getHotelById("1");
+            if(hotelOwner) {
+                const featuresInsert = await db.update(hotels).set({ features }).where(eq(hotels.id, 1)); // Specify the hotel by its hotel_id
+                return featuresInsert;
+            } 
+        }
+    } catch(error) {
+
     }
 }

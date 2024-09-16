@@ -3,7 +3,7 @@
 import { Card } from "@/components/ui/card";
 import RegisterForm from "./forms/register";
 import OrganizationDetails from "./forms/organization-details";
-import RoomSetup from "./forms/room-setup";
+import RoomSetup from "./forms/hotel-details";
 import MultistepHeader from "./header";
 import MultistepNavigation from "./multi-step-navigation";
 import { useEffect, useState } from "react";
@@ -13,7 +13,7 @@ import { stepStatus } from "@/types/step-status";
 const setupSteps = [
   { index: 1, title: "Registration", status: "done" },
   { index: 2, title: "Organization details", status: "current" },
-  { index: 3, title: "Room Setup", status: "next" },
+  { index: 3, title: "Hotel details", status: "next" },
 ];
 
 const MultistepForm = () => {

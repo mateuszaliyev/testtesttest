@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS "hotels" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"address_id" integer NOT NULL,
 	"name" varchar(256) NOT NULL,
+	"features" jsonb,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"deleted_at" timestamp,

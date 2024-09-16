@@ -3,7 +3,8 @@ import {
   serial,
   timestamp, 
   varchar,
-  integer
+  integer,
+  jsonb
 } from 'drizzle-orm/pg-core';
 
 import { addresses } from './addresses';
@@ -12,11 +13,13 @@ import { reservations } from './reservations';
 import { rooms } from './rooms';
 import { tasks } from './tasks';
 import { employments } from './employments';
+import { features } from 'process';
 
 export const hotels = pgTable('hotels', {
   id: serial('id').primaryKey().unique().notNull(),
   address_id: integer('address_id').notNull().references(()=>addresses.id),
   name: varchar('name', { length: 256 }).notNull(),
+  features: jsonb('features'),
   created_at: timestamp("created_at", { mode: "string" }).notNull().defaultNow(),
   updated_at: timestamp("updated_at", { mode: "string" }).notNull().defaultNow(),
   deleted_at: timestamp("deleted_at", { mode: "string" })

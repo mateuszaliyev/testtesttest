@@ -8,7 +8,7 @@ const MultistepFormContent = ({
     children,
 } : MultistepFormContentProps) => {
     return (
-            <CardContent className="my-8 h-[500px]">
+            <CardContent className="h-[500px] px-0">
                 {children}
             </CardContent>
         );

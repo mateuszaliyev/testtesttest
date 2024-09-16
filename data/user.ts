@@ -20,3 +20,11 @@ export const getUserById = async (id: number) => {
         return null;
     }
 }
+
+export const setUserToConfigured = async (id: number) => {
+    try {
+        await db.update(users).set({is_new: false}).where(eq(users.id, id));
+    } catch (error) {
+        console.error("Error updating user: ", error);
+    }
+}
