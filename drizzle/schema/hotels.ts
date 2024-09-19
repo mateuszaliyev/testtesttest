@@ -14,6 +14,7 @@ import { rooms } from './rooms';
 import { tasks } from './tasks';
 import { employments } from './employments';
 import { features } from 'process';
+import { users } from './users';
 
 export const hotels = pgTable('hotels', {
   id: serial('id').primaryKey().unique().notNull(),

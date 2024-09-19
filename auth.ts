@@ -16,11 +16,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           session.user.id = token.sub;
         }
     
-        if (token.role === "owner" || token.role === "employee") {
-          session.user.role = token.role;
-        } else {
-          session.user.role = "employee";
-        }
+        session.user.role = token.role
 
         session.user.firstName = token.firstName as string;
         session.user.lastName = token.lastName as string;
@@ -37,14 +33,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     
       const role = await getRole(existingUser.id);
     
-      token.role = role as string;
-
-      /*
-      if (role === "owner" || role === "employee") {
-        token.role = role; // Assign role to token
-      } else {
-        token.role = "employee"; 
-      }*/
+      token.role = role;
 
       token.firstName = existingUser.first_name || "";
       token.lastName = existingUser.last_name || "";

@@ -1,9 +1,32 @@
+DO $$ BEGIN
+ CREATE TYPE "public"."reservation_status" AS ENUM('BOOKED', 'WAITING FOR PAYMENT', 'CANCELLED', 'ONGOING', 'FINISHED');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ CREATE TYPE "public"."room_status" AS ENUM('WAITING FOR CLEANING', 'AVAILABLE', 'NOT AVAILABLE');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ CREATE TYPE "public"."task_status" AS ENUM('ASSIGNED', 'WAITING FOR ASSIGNMENT', 'SOLVED');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ CREATE TYPE "public"."work_status" AS ENUM('Present', 'Busy', 'Day off', 'Emergency Leave', 'Vacation');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "addresses" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"address" varchar(256) NOT NULL,
 	"city" varchar(256) NOT NULL,
 	"country" varchar(256) NOT NULL,
-	"state" varchar(256) NOT NULL,
 	"zipcode" varchar(256) NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
@@ -16,6 +39,7 @@ CREATE TABLE IF NOT EXISTS "employments" (
 	"hotel_id" integer,
 	"role_id" integer NOT NULL,
 	"user_id" integer NOT NULL,
+	"work_status" "work_status" NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"deleted_at" timestamp,
@@ -54,7 +78,7 @@ CREATE TABLE IF NOT EXISTS "reservations" (
 	"guests" numeric NOT NULL,
 	"hotel_id" integer NOT NULL,
 	"room_id" integer NOT NULL,
-	"status" varchar NOT NULL,
+	"reservation_status" "reservation_status" NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"deleted_at" timestamp,
@@ -70,10 +94,21 @@ CREATE TABLE IF NOT EXISTS "roles" (
 	CONSTRAINT "roles_id_unique" UNIQUE("id")
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "room_types" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"contains" jsonb,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
+	"deleted_at" timestamp,
+	CONSTRAINT "room_types_id_unique" UNIQUE("id")
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "rooms" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"hotel_id" integer NOT NULL,
 	"number" numeric NOT NULL,
+	"room_status" "room_status" DEFAULT 'AVAILABLE' NOT NULL,
+	"type_id" integer NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"deleted_at" timestamp,
@@ -86,7 +121,7 @@ CREATE TABLE IF NOT EXISTS "tasks" (
 	"guest_id" integer NOT NULL,
 	"description" varchar(256) NOT NULL,
 	"hotel_id" integer NOT NULL,
-	"status" varchar(256) NOT NULL,
+	"task_status" "task_status" DEFAULT 'WAITING FOR ASSIGNMENT' NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"deleted_at" timestamp,
@@ -101,6 +136,7 @@ CREATE TABLE IF NOT EXISTS "users" (
 	"last_name" varchar(256) NOT NULL,
 	"password" varchar(256) NOT NULL,
 	"is_new" boolean DEFAULT true NOT NULL,
+	"is_owner" boolean NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"deleted_at" timestamp,

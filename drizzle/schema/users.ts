@@ -18,6 +18,7 @@ export const users = pgTable('users', {
   last_name: varchar('last_name', { length: 256 }).notNull(),
   password: varchar('password', { length: 256 }).notNull(),
   is_new: boolean("is_new").default(true).notNull(),
+  is_owner: boolean("is_owner").notNull(),
   created_at: timestamp("created_at", { mode: "string" }).notNull().defaultNow(),
   updated_at: timestamp("updated_at", { mode: "string" }).notNull().defaultNow(),
   deleted_at: timestamp("deleted_at", { mode: "string" })

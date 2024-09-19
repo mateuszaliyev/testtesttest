@@ -8,6 +8,6 @@ declare module "next-auth" {
     interface User {
         firstName: string;
         lastName: string;
-        role: "owner" | "employee";
+        role: string;
     }
 }

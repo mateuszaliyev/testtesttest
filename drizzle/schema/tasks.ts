@@ -5,20 +5,23 @@ import {
   serial,
   timestamp, 
   varchar,
-  integer
+  integer,
+  pgEnum
 } from 'drizzle-orm/pg-core';
 
 import { employments } from './employments';
 import { guests } from './guests';
 import { hotels } from './hotels';
   
+export const taskStatus = pgEnum('task_status', ["ASSIGNED", "WAITING FOR ASSIGNMENT", "SOLVED"])
+
 export const tasks = pgTable('tasks', {
     id: serial('id').primaryKey().unique().notNull(),
     assigner_id: integer('assigner_id').references(()=>employments.id),
     guest_id: integer('guest_id').notNull().references(()=>guests.id),
     description: varchar('description', { length: 256 }).notNull(),
     hotel_id: integer('hotel_id').notNull().references(()=>hotels.id),
-    status: varchar('status', { length: 256 }).notNull(),
+    task_status: taskStatus('task_status').notNull().default("WAITING FOR ASSIGNMENT"),
     created_at: timestamp("created_at", { mode: "string" }).notNull().defaultNow(),
     updated_at: timestamp("updated_at", { mode: "string" }).notNull().defaultNow(),
     deleted_at: timestamp("deleted_at", { mode: "string" })

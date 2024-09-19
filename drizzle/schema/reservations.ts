@@ -4,12 +4,15 @@ import {
     timestamp, 
     varchar,
     numeric,
-    integer
+    integer,
+    pgEnum
   } from 'drizzle-orm/pg-core';
 import { guests } from './guests';
 import { hotels } from './hotels';
 import { rooms } from './rooms';
 import { relations } from 'drizzle-orm';
+
+export const reservationStatus = pgEnum('reservation_status', ["BOOKED", "WAITING FOR PAYMENT", "CANCELLED", "ONGOING", "FINISHED"])
 
 export const reservations = pgTable('reservations', {
     id: serial('id').primaryKey().unique().notNull(),
@@ -19,7 +22,7 @@ export const reservations = pgTable('reservations', {
     guests: numeric('guests').notNull(),
     hotel_id: integer('hotel_id').notNull().references(()=>hotels.id),
     room_id: integer('room_id').notNull().references(()=>rooms.id),
-    status: varchar('status').notNull(),
+    reservation_status: reservationStatus('reservation_status').notNull(),
     created_at: timestamp("created_at", { mode: "string" }).notNull().defaultNow(),
     updated_at: timestamp("updated_at", { mode: "string" }).notNull().defaultNow(),
     deleted_at: timestamp("deleted_at", { mode: "string" })

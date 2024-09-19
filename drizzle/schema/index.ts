@@ -1,9 +1,0 @@
-export { addresses } from "@/drizzle/schema/addresses";
-export { employments } from "@/drizzle/schema/employments";
-export { hotels } from "@/drizzle/schema/hotels";
-export { guests } from "@/drizzle/schema/guests";
-export { reservations } from "@/drizzle/schema/reservations";
-export { roles } from "@/drizzle/schema/roles";
-export { rooms } from "@/drizzle/schema/rooms";
-export { tasks } from "@/drizzle/schema/tasks";
-export { users } from "@/drizzle/schema/users";

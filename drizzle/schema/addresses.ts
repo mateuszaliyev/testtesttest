@@ -14,7 +14,6 @@ export const addresses = pgTable('addresses', {
   address: varchar('address', { length: 256 }).notNull(),
   city: varchar('city', { length: 256 }).notNull(),
   country: varchar('country', { length: 256 }).notNull(),
-  state: varchar('state', { length: 256 }).notNull(),
   zipcode: varchar('zipcode', { length: 256 }).notNull(),
   created_at: timestamp("created_at", { mode: "string" }).notNull().defaultNow(),
   updated_at: timestamp("updated_at", { mode: "string" }).notNull().defaultNow(),

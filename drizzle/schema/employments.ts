@@ -4,18 +4,22 @@ import {
     pgTable,
     serial,
     timestamp, 
-    integer
+    integer,
+    pgEnum
 } from 'drizzle-orm/pg-core';
 
 import { hotels } from './hotels';
 import { roles } from './roles';
 import { users } from './users';
   
+export const workStatus = pgEnum('work_status', ["Present", "Busy", "Day off", "Emergency Leave", "Vacation"]);
+
 export const employments = pgTable('employments', {
     id: serial('id').primaryKey().unique().notNull(),
     hotel_id: integer('hotel_id').references(()=>hotels.id),
     role_id: integer('role_id').notNull().references(()=>roles.id),
     user_id: integer('user_id').notNull().references(()=>users.id),
+    work_status: workStatus('work_status').notNull(),
     created_at: timestamp("created_at", { mode: "string" }).notNull().defaultNow(),
     updated_at: timestamp("updated_at", { mode: "string" }).notNull().defaultNow(),
     deleted_at: timestamp("deleted_at", { mode: "string" })

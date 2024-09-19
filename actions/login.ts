@@ -8,7 +8,7 @@ import { AuthError } from "next-auth";
 import { db } from "@/lib/db";
 import { employments, roles, users } from "@/drizzle";
 import { eq } from "drizzle-orm";
-
+import { getUserByEmail } from "@/data/user";
 
 export const login = async (values: z.infer<typeof LoginSchema>) => {
     const validatedFields = LoginSchema.safeParse(values);
@@ -20,55 +20,21 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
     const { email, password} = validatedFields.data;
 
     try {
-        const user = await db.select()
-                            .from(users)
-                            .where(eq(users.email, email))
-                            .limit(1);
+      const user = await getUserByEmail(email);
 
-        if (!user || user.length === 0) {
-            return { error: "User not found!" };
-          }
+      if (!user) return { error: "User not found!" };
       
-          const userId = user[0].id;
-          const isNewUser = user[0].is_new;
+      let redirectingTo;
       
-          const employment = await db.select({
-            roleId: employments.role_id
-          })
-            .from(employments)
-            .where(eq(employments.user_id, userId))
-            .limit(1);
-      
-          if (!employment || employment.length === 0) {
-            return { error: "No role assigned to the user!" };
-          }
-      
-          const roleId = employment[0].roleId;
-      
-          const role = await db.select({
-            roleName: roles.name 
-          })
-            .from(roles)
-            .where(eq(roles.id, roleId))
-            .limit(1);
-      
-          const roleName = role[0].roleName;
-      
-          let redirectingTo;
-          console.log("Is new:", isNewUser);
-          console.log("roleName:", roleName);
-          console.log("Is new:", isNewUser);
-          if(isNewUser && roleName === "owner") redirectingTo = OWNER_SETUP_REDIRECT;
-          else if (isNewUser && roleName === "employee") redirectingTo = EMPLOYEE_SETUP_REDIRECT;
-          else redirectingTo = DEFAULT_LOGIN_REDIRECT;
-          console.log("redirectingTo:", redirectingTo);
-
-          await signIn("credentials", {
-            email,
-            password,
-            redirectTo: redirectingTo,
-          });
-
+      if(user.is_new && user.is_owner) redirectingTo = OWNER_SETUP_REDIRECT;
+      else if (user.is_new && !user.is_owner) redirectingTo = EMPLOYEE_SETUP_REDIRECT;
+      else redirectingTo = DEFAULT_LOGIN_REDIRECT;
+  
+      await signIn("credentials", {
+        email,
+        password,
+        redirectTo: redirectingTo,
+      });
     } catch (error) {
         if ( error instanceof AuthError) {
             switch(error.type) {

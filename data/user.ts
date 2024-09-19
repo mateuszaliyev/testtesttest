@@ -3,6 +3,29 @@ import { db } from "@/lib/db";
 import { eq } from "drizzle-orm";
 export const runtime = 'edge'
 
+type roleType = "owner" | "employee"
+
+export interface NewUser {
+    firstName: string;
+    lastName: string;
+    email: string;
+    hashedPassword: string;
+    role: roleType;
+    acceptedToS: boolean;
+}
+
+export const createUser = async (user: NewUser)  => {
+    const isUserOwner = user.role === "owner";
+
+    return db.insert(users).values({
+        first_name: user.firstName,
+        last_name: user.lastName,
+        email: user.email,
+        is_owner: isUserOwner,
+        password: user.hashedPassword,
+    });
+}
+
 export const getUserByEmail = async (email: string) => {
     try {
         const user = await db.select().from(users).where(eq(users.email, email));
