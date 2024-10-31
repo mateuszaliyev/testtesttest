@@ -5,7 +5,7 @@ import { useState, useTransition } from "react";
 import { CardWrapper } from "./card-wrapper";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { RegisterSchema } from "@/schemas";
+import { RegisterSchema } from "@/schemas/register-schema";
 import { Input } from "@/components/ui/input";
 import {
   Form,

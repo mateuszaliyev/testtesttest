@@ -1,7 +1,7 @@
 "use client";
 
 import { guestOptions } from "@/constants/guest-options";
-import { ReservationData } from "@/schemas";
+import { ReservationData } from "@/schemas/reservation-data-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
