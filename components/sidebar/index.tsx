@@ -10,8 +10,8 @@ const Sidebar = () => {
         <aside className="h-full flex flex-col min-w-64 bg-[#F6F6F6] justify-between">
             <div>
                 <Logo />
-                <SelectSeparator />
-                <div className="flex flex-col space-y-2">
+                <SelectSeparator className="bg-[#DCDCDC] "/>
+                <div className="flex flex-col space-y-2 mt-6">
                     {sidebarItems.map((item) => (
                         <SidebarItem
                             key={item.name}

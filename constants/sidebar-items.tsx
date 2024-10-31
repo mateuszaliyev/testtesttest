@@ -1,6 +1,5 @@
-// sidebar-items.ts
 
-import { IoAppsSharp, IoCalendarClearOutline, IoFlagOutline  } from "react-icons/io5";
+import { FaRegCalendarAlt, FaThLarge, FaRegListAlt } from "react-icons/fa";
 
 interface SidebarItemProps {
     name: string;
@@ -11,17 +10,17 @@ interface SidebarItemProps {
 export const sidebarItems: SidebarItemProps[] = [
     {
         name: "Dashboard",
-        icon: <IoAppsSharp />,  
+        icon: <FaThLarge className="w-7 h-7"/>,  
         route: "/dashboard",
     },
     {
         name: "Booking",
-        icon: <IoCalendarClearOutline />,
+        icon: <FaRegCalendarAlt className="w-7 h-7"/>,
         route: "/booking",
     },
     {
         name: "Tasks",
-        icon: <IoFlagOutline />,
+        icon: <FaRegListAlt className="w-7 h-7"/>,
         route: "/tasks",
     }
 ];

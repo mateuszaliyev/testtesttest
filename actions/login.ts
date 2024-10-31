@@ -26,10 +26,16 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
       
       let redirectingTo;
       
+
+      /* JUST FOR A WHILE COMMENTED OUT 
       if(user.is_new && user.is_owner) redirectingTo = OWNER_SETUP_REDIRECT;
       else if (user.is_new && !user.is_owner) redirectingTo = EMPLOYEE_SETUP_REDIRECT;
       else redirectingTo = DEFAULT_LOGIN_REDIRECT;
-  
+        */
+
+      redirectingTo = DEFAULT_LOGIN_REDIRECT;
+
+      
       await signIn("credentials", {
         email,
         password,

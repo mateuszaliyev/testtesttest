@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Manrope } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
 
-const manrope = Manrope({ subsets: ["latin"] });
+const poppins = Poppins({weight: ["500"], subsets: ["latin"]});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -20,7 +20,7 @@ export default async function RootLayout({
   return (
     <SessionProvider session={session}>
       <html lang="en">
-        <body className={manrope.className}>{children}</body>
+        <body className={poppins.className}>{children}</body>
       </html>
     </SessionProvider>
   );

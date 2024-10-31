@@ -1,12 +1,10 @@
-import Boilerplate from "@/components/hotel/boilerplate/index";
-import PickCalendar from "./pick-calendar";
+import Boilerplate from "@/components/hotel/boilerplate";
+import CreateNewBooking from "@/components/hotel/new-booking/create-new-booking";
 
 const BookingPage = () => {
   return (
-    <Boilerplate
-      title="Booking"
-    >
-      <PickCalendar />
+    <Boilerplate pageName="Booking">
+      <CreateNewBooking />
     </Boilerplate>
   );
 }

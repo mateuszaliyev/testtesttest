@@ -4,16 +4,18 @@ import { Calendar } from "@/components/ui/calendar";
 import { useState } from "react";
 import { DateRange } from "react-day-picker";
 
-const PickCalendar = () => {
-    const [range, setRange] = useState<DateRange | undefined>(undefined);
-    
+interface PickCalendarProps {
+    range: DateRange | undefined;
+    setRange: (range: DateRange | undefined) => void;
+}
+
+const PickCalendar = ({ range, setRange }: PickCalendarProps) => {
     const handleSelect = (newRange: DateRange | undefined) => {
-        console.log("Selected Range:", newRange);
         setRange(newRange);
     };
 
-    console.log(range?.from);
-    console.log(range?.to);
+    //console.log(range?.from);
+    //console.log(range?.to);
 
     return (
         <Calendar
@@ -23,6 +25,7 @@ const PickCalendar = () => {
             max={31}
             disabled={{ before: new Date() }}
             onSelect={handleSelect}
+            className=""
         />
     );
 }

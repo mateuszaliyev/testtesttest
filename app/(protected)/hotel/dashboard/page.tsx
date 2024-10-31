@@ -1,9 +1,11 @@
+import Boilerplate from "@/components/hotel/boilerplate";
+
 const DashboardPage = () => {
   return (
-    <div>
-      Dashboard
-    </div>
-    );
+    <Boilerplate pageName="Dashboard" showCard>
+      Test
+    </Boilerplate>
+  );
 }
  
 export default DashboardPage;
