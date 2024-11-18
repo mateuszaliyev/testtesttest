@@ -21,6 +21,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input"; // Import your input component
+import GuestForm from "@/components/hotel/new-booking/guest-form";
 
 
 // Infer the form values from the extended schema
@@ -46,12 +47,38 @@ const NewBooking = () => {
     const [range, setRange] = useState<DateRange | undefined>(undefined);
     const [contactMethod, setContactMethod] = useState<"atPlace" | "email" | "phone">("atPlace");
     const [selectedExtraServices, setSelectedExtraServices] = useState<string[]>([]);
+    const [currentStep, setCurrentStep] = useState(1); 
+
+    const goToNextStep = () => {
+        setCurrentStep(currentStep+1); 
+    };
+
+    const goToPreviousStep = () => {
+        if (currentStep > 1) setCurrentStep(currentStep-1)
+    };
+
     const router = useRouter();
 
     const form = useForm<ReservationDataFormValues>({
         resolver: zodResolver(ReservationData),
         defaultValues,
     });
+
+    const generateGuestForms = () => {
+        const guests = form.getValues("guests");
+        
+        const guestComponents = [];
+        
+        for (const [guestType, count] of Object.entries(guests)) {
+            for (let i = 0; i < count; i++) {
+                guestComponents.push(
+                    <GuestForm key={`${guestType}-${i}`} type={guestType} index={i+1}/>
+                );
+            }
+        }
+
+        return guestComponents;
+    };
 
     const handleExtraServiceChange = (serviceName: string) => {
         setSelectedExtraServices((prev) => {
@@ -86,17 +113,24 @@ const NewBooking = () => {
         <Boilerplate pageName="Booking" showCard>
             <div className="w-full p-3 mb-5">
                 <div className="flex flex-row items-center justify-start gap-x-3">
-                    <Button variant={"ghost"} onClick={returnToOverview}>
+                    <Button variant={"ghost"} onClick={currentStep === 1 ? returnToOverview : goToPreviousStep}>
                         <FaArrowLeft className="hover:bg-none text-black font-light" />
                     </Button>
                     <span className="text-lg font-normal">
-                        Choose the booking details
+                        {currentStep === 1 ? "Choose the booking details" : "Enter guest details"}
                     </span>
                 </div>
             </div>
 
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(submitData)}>
+            <form onSubmit={form.handleSubmit(data => {
+                if (currentStep === 1) {
+                    goToNextStep(); // Przejdź do następnego kroku
+                } else {
+                    submitData(data); // Zatwierdź dane
+                }
+            })}>
+                {currentStep === 1 && ( <>
                     <div className="w-full px-10">
                         <div className="flex flex-row justify-between">
                             {/* Date Picker */}
@@ -226,11 +260,21 @@ const NewBooking = () => {
                             </ElementContainer>
                         </div>
                     </div>
+                </>)}
+                {currentStep === 2 && (
+                    <div className="px-10 w-full">
+                        <ScrollArea className="w-full h-[700px]">
+                            <div className="grid grid-cols-2 gap-10">
+                                {generateGuestForms()} {/* Render guest forms dynamically */}
+                            </div>
+                        </ScrollArea>
+                    </div>
+                )}
 
                     {/* Submit Button */}
                     <div className="w-full flex justify-end px-9 py-3">
                         <Button type="submit">
-                            Submit
+                            {currentStep === 1 ? "Next" : "Submit"}
                         </Button>
                     </div>
                 </form>
