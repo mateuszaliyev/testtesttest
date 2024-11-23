@@ -8,4 +8,4 @@ export const GuestSchema = z.object({
     phone: z.string().optional(),
 });
 
-export const guests = z.array(GuestSchema);
+export const guests = z.object({ guests: z.array(GuestSchema) });
