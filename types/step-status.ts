@@ -1,1 +1,0 @@
-export type stepStatus = "done" | "current" | "next";
